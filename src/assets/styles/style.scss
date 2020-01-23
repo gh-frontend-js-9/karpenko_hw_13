@@ -1,5 +1,9 @@
 $font-stack: -apple-system, BlinkMacSystemFont, Roboto, "Open Sans", "Helvetica Neue", sans-serif;
 
+$font_base: 1.25rem;
+$font_header: 1.5rem;
+$font_subheader: 1.35rem;
+
 @font-face {
   font-family: "Roboto";
   font-style: normal;
@@ -10,10 +14,15 @@ $font-stack: -apple-system, BlinkMacSystemFont, Roboto, "Open Sans", "Helvetica 
 html{
     height: 100%;
 }
+::-webkit-scrollbar {
+    display: none;
+}
+
 
 body{
     height: inherit;
     max-height: 100%;
+    -ms-overflow-style: none;
 }
 
 *{
@@ -23,6 +32,8 @@ body{
 
 $base_background: #2E3040;
 $base_blue: #2090E9;
+$input_field_bg: #3E4156;
+$icon_color: #7B7F91;
 
 p{
     display: block;
@@ -115,11 +126,11 @@ ul{
 
         &_success{
             color: green;
-            font-size: 1.25rem;
+            font-size: $font_base;
         }
         &_error{
             color: orangered;
-            font-size: 1.25rem;
+            font-size: $font_base;
             text-align: center;
         }
     }
@@ -150,7 +161,7 @@ ul{
             flex-flow: row wrap;
             &__item{
                 margin: auto 1rem;
-                font-size: 1.35rem;
+                font-size: $font_subheader;
                 padding: .25rem;
                 
             }
@@ -160,7 +171,7 @@ ul{
                 height: $img_size;
                 object-fit: cover;
                 margin: .25rem .5rem;
-                vertical-align: middle;
+                margin: auto;
                 border-radius: 50%;
             }
             &__add_block{
@@ -195,6 +206,7 @@ ul{
             color: $side_bar_color;
             font-size: 1.5rem;
             padding: 1rem;
+            list-style-type: none;
 
             &:hover *{
                 color: #fff;
@@ -209,17 +221,110 @@ ul{
 }
 
 .main_content{
+    overflow-y: scroll;
     height: 100%;
     width: 100%;
+    &__section{
+        overflow-y: scroll;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+    }
     &__wrapper{
+        overflow-y: scroll;
         display: flex;
         flex-flow: row nowrap;
         height: 100%;
         width: 100%;
-        position: fixed;
+        overflow: scroll;
+        // fixed
+        position: relative;
         overflow: visible;
     }
+    &__list_messages{
+        width: 33.3%;
+        background: $base_background;
+        height: 100%;
+        overflow: scroll;
+    }
+    &__list_info{
+        width: 33.3%;
+        background: $base_background;
+        height: 100%;
+        overflow: scroll;
+        padding: 1rem 0.5rem;
+        // logo
+        &__photo{
+            $size: 2rem;
+            border-radius: 50%;
+            width: $size;
+            height: $size;
+        }
+        // name: big text
+        &__header{
+            font-size: $font_header;
+            color: #fff;
+            font-weight: 700;
+        }
+        // description
+        &__description{
+            color: $icon_color;
+            font-size: $font_base;
+        }
+        // Label
+        &__label{
+            font-size: $font_base;
+            color: $icon_color;
+        }
+        // contacts: email, phone, address
+        &__base{
+            color: #fff;
+            font-size: $font_base;
+        }
+    }
+    &__input_messages{
+        
+        &__wrapper{
+            background: $input_field_bg;
+            position: fixed;
+            bottom: 0;
+            width: fit-content;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            width: auto;
+        }
+        &__input_tag{
+            width: fit-content;
+            background: transparent;
+            border: none;
+            padding: .5rem .25rem;
+            color: #fff;
+            letter-spacing: 0.05rem;
+            font-weight: 600;
+            word-spacing: 0.02rem;
+            outline: none;
+        }
+        &__icon{
+            text-align: center;
+            font-size: $font_base;
+            color: $icon_color;
+            &:hover{
+                color: #fff;
+            }
+        }
+    }
     &__messages{
+        &__input_field{
+            background: #3E4156;
+            padding: .5rem 1rem;
+            margin: 1rem auto;
+            position: fixed;
+            bottom: 0;
+            width: 50%;
+            left: 25%;
+        }
         &__header{
             display: flex;
             justify-content: space-between;
@@ -235,6 +340,7 @@ ul{
                 margin: auto 1rem;
                 &:hover, &:focus{
                     color: #fff;
+                    cursor: pointer;
                 }
             }
             &__select{
@@ -264,7 +370,36 @@ ul{
             }
         }
     }
+    &__list_users{
+        background: $base_background;
+        box-shadow: 1px;
+        width: 33.3%;
+        height: 100%;
+        overflow: scroll;
+        padding: .25rem 0;
+        @extend .box_shadow;
 
+        &__item{
+            list-style-type: none;
+            padding: 1.5rem .5rem;
+            border-bottom: 0.1rem solid #313343;
+        }
+    }
+}
+.box_shadow{
+    -webkit-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
+    box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
+}
+.box{
+    &__header{
+        font-size: $font_header;
+        color: #fff;
+    }
+    &__base{
+        color: #444;
+        font-size: $font_base;
+    }
 }
 
 // Media tag
@@ -305,7 +440,7 @@ ul{
 
                 &__item{
                     margin: 1rem auto;
-                    font-size: 1.35rem;
+                    font-size: $font_subheader;
                     padding: .25rem;
                 }
             }

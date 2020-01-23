@@ -83,7 +83,7 @@ export class SigupView {
     }
 
     signup() {
-        new FetchTemplate(document.querySelector('.input__message_error'), document.querySelector('.input__message_success')).request("api/users/login", TYPES.post, {
+        new FetchTemplate(document.querySelector('.input__message_error'), document.querySelector('.input__message_success')).request("api/users", TYPES.post, {
             email: this.email.value,
             password: this.password.value,
             name: this.name.value

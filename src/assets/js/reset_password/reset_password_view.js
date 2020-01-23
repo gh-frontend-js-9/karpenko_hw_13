@@ -83,7 +83,7 @@ export class ResetPasswordView {
     }
 
     reset() {
-        new FetchTemplate(document.querySelector('.input__message_error'), document.querySelector('.input__message_success')).request("api/users/login", TYPES.post, {
+        new FetchTemplate(document.querySelector('.input__message_error'), document.querySelector('.input__message_success')).request("api/users/reset_password", TYPES.post, {
             email: this.email.value,
             password: this.password.value,
             confirmationPassword: this.conf_password.value
