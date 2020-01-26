@@ -27,13 +27,13 @@
             method: type,
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
-              "x-auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTE5YzIyM2E0MTk5YzAwMjI3NTI2OGEiLCJpYXQiOjE1Nzk2ODc4OTl9.M5q83O_nP6B8SbfNKOs3CaQTu4JaQcbr_MgDLSgqnTU"
+              "x-auth-token": config.key
             },
             body: JSON.stringify({
               data
             })
           }).then(async responce => {
-            if (responce.ok) {
+            if (responce.status) {
               return responce.json();
             }
           }).catch(error => console.log(error));
@@ -42,7 +42,7 @@
             method: type,
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
-              "x-auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTE5YzIyM2E0MTk5YzAwMjI3NTI2OGEiLCJpYXQiOjE1Nzk2ODc4OTl9.M5q83O_nP6B8SbfNKOs3CaQTu4JaQcbr_MgDLSgqnTU"
+              "x-auth-token": config.key
             },
             body: JSON.stringify({
               data
@@ -132,7 +132,7 @@
         this.message_success.className = "input__message_success";
         this.button = document.createElement('button');
         this.button.className = "form__button";
-        this.button.innerHTML = "Log in";
+        this.button.innerHTML = "Reset";
         this.button.addEventListener('click', e => {
           e.preventDefault();
           this.reset();

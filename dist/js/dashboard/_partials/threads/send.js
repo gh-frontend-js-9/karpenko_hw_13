@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-    typeof define === 'function' && define.amd ? define('index', ['exports'], factory) :
-    (global = global || self, factory(global.index = {}));
+    typeof define === 'function' && define.amd ? define('send', ['exports'], factory) :
+    (global = global || self, factory(global.send = {}));
 }(this, (function (exports) { 'use strict';
 
     const config = {
@@ -86,8 +86,19 @@
 
     }
 
-    exports.FetchTemplate = FetchTemplate;
-    exports.TYPES = TYPES;
+    class SendMessage {
+      constructor() {
+        this._id = '5e1a1c818ec2f49ab3e59ab2';
+      }
+
+      send(data) {
+        alert(data);
+        new FetchTemplate().request('api/threads/messages', TYPES.post, data);
+      }
+
+    }
+
+    exports.SendMessage = SendMessage;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
