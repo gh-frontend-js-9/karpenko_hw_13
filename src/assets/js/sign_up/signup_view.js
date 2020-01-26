@@ -1,4 +1,4 @@
-import {FetchTemplate} from '../api_fetcher/index';
+import {FetchTemplate, TYPES} from '../api_fetcher/index';
 export class SigupView {
     constructor() {
         this.generateTemplate();

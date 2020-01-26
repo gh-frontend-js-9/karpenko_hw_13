@@ -1,6 +1,8 @@
 'use strict';
 import { FetchTemplate, TYPES } from '../api_fetcher/index';
 import {config} from '../config';
+import {UserInfoView} from './_partials/user_info/view';
+import {SendMessage} from './_partials/threads/send';
 
 export class Request{
     constructor(){}
@@ -265,6 +267,20 @@ export class MessagesView {
         clip.style.display = 'none';
         clip.type = "file";
 
+        this.message_field__input.addEventListener('keydown', (e) => {
+            let key = e.keyCode || e.which;
+            if(key == 13){
+                new SendMessage().send({
+                    message: {
+                        body: this.message_field.value,
+                        thread: {
+                            _id: new SendMessage()._id
+                        }
+                    }
+                })
+            }
+        })
+
         this.message_field.appendChild(this.message_field__input);
         this.message_field.appendChild(label);
         this.message_field.appendChild(clip);
@@ -274,6 +290,11 @@ export class MessagesView {
         this._generate__message_field();
         this.messages_list = document.createElement('article');
         this.messages_list.className = "main_content__list_messages";
+
+        let error_field = document.createElement('span');
+        error_field.className = "input__message_error";
+        this.messages_list.appendChild(error_field);
+
         let list_wrapper = document.createElement('ul');
 
         let responce = fetch(`https://${config.domain}/api/threads/messages/5e1a1c818ec2f49ab3e59ab2?sort=desc`, {
@@ -299,20 +320,27 @@ export class MessagesView {
         this.users_info = document.createElement("article");
         this.users_info.className = "main_content__list_info";
 
-        let current_user = fetch(`https://${config.domain}/api/users/`, {
-            method: TYPES.get,
-            headers: {
-                "x-access-token": config.key
-            }
-        })
-
-        Promise.resolve(current_user).then(responce => {
-            Promise.resolve(responce.json()).then(array => {
-                Object.values(array).forEach(user => {
-                    
-                })
-            })
-        })
+        // let current_user = fetch(`https://${config.domain}/api/users/`, {
+        //     method: TYPES.get,
+        //     headers: {
+        //         "x-access-token": config.key
+        //     }
+        // })
+        // let info = new UserInfoView().info
+        // current_user.then(responce => {
+        //     Promise.resolve(responce.json()).then(user => {
+        //         info.name = user.name
+        //         info.position = user.position
+        //         info.description = user.description
+        //         info.organization = user.organization
+        //         //   
+        //         info.contacts.phone = user.phone
+        //         info.contacts.email = user.email
+        //         info.contacts.address = user.address
+        //     })
+        // })
+        // new UserInfoView()
+        this.users_info.appendChild(new UserInfoView().contacts)
     }
 
     _generate_main_content(){

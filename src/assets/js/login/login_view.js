@@ -57,7 +57,7 @@ export class LoginView {
         
         this.button = document.createElement('button');
         this.button.className = "form__button";
-        this.button.innerHTML = "Reset";
+        this.button.innerHTML = "Log in";
         this.button.addEventListener('click', (e) => {
             e.preventDefault();
             this.login()

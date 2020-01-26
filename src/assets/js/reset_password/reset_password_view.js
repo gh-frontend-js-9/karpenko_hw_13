@@ -58,7 +58,7 @@ export class ResetPasswordView {
         
         this.button = document.createElement('button');
         this.button.className = "form__button";
-        this.button.innerHTML = "Log in";
+        this.button.innerHTML = "Reset";
         this.button.addEventListener('click', (e) => {
             e.preventDefault();
             this.reset()
