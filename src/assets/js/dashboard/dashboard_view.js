@@ -3,6 +3,7 @@ import { FetchTemplate, TYPES } from '../api_fetcher/index';
 import {config} from '../config';
 import {UserInfoView} from './_partials/user_info/view';
 import {SendMessage} from './_partials/threads/send';
+import {GetThread} from './_partials/threads/get_threads_by_id';
 
 export class Request{
     constructor(){}
@@ -243,6 +244,7 @@ export class MessagesView {
                     let li = document.createElement('li');
                     li.className = "main_content__list_users__item box__header"
                     li.innerText = user.name;
+                    li.id = user._id;
                     list_wrapper.appendChild(li);
                 })
             })
@@ -271,11 +273,11 @@ export class MessagesView {
             let key = e.keyCode || e.which;
             if(key == 13){
                 new SendMessage().send({
+                    thread: {
+                        _id: window.localStorage.getItem("_id")
+                    },
                     message: {
-                        body: this.message_field.value,
-                        thread: {
-                            _id: new SendMessage()._id
-                        }
+                        body: this.message_field__input.value
                     }
                 })
             }
@@ -296,61 +298,49 @@ export class MessagesView {
         this.messages_list.appendChild(error_field);
 
         let list_wrapper = document.createElement('ul');
-
-        let responce = fetch(`https://${config.domain}/api/threads/messages/5e1a1c818ec2f49ab3e59ab2?sort=desc`, {
-            headers: {
-                "x-access-token": config.key
+        // Now any user not create thread => messages. If use e.target.id => empty array
+        // 5e1a1c818ec2f49ab3e59ab2
+        document.body.addEventListener('click', (e) => {
+            if(e.target.tagName.toLowerCase() == 'li' && e.target.id.length > 8){
+                // setInterval(() => {
+                let responce = fetch(`https://${config.domain}/api/threads/messages/${e.target.id}?sort=desc`, {
+                // let responce = fetch(`https://${config.domain}/api/threads/messages/5e2eadd68189aa0022fa09bf?sort=desc`, {
+                    method: TYPES.get,
+                    headers: {
+                        "x-access-token": config.key
+                    }
+                })
+                // let child_element = document.querySelector(".messages_list__item")
+                // list_wrapper.removeChild(child_element)
+                Promise.resolve(responce).then(resolve => {
+                    Promise.resolve(resolve.json()).then(array => {
+                        Object.values(array).forEach(message => {
+                            let li = document.createElement('li');
+                            li.className = "main_content__list_users__item box__header messages_list__item";
+                            li.innerText = message.body;
+                            list_wrapper.appendChild(li);
+                        })
+                    })
+                })
+                this.messages_list.appendChild(list_wrapper);
+                // }, 100)
             }
         })
-
-        Promise.resolve(responce).then(resolve => {
-            Promise.resolve(resolve.json()).then(array => {
-                Object.values(array).forEach(message => {
-                    let li = document.createElement('li');
-                    li.className = "main_content__list_users__item box__header";
-                    li.innerText = message.body;
-                    list_wrapper.appendChild(li);
-                })
-            })
-        })
-        this.messages_list.appendChild(list_wrapper);
         this.messages_list.appendChild(this.message_field);
     }   
     _generate__user_info(){
         this.users_info = document.createElement("article");
         this.users_info.className = "main_content__list_info";
-
-        // let current_user = fetch(`https://${config.domain}/api/users/`, {
-        //     method: TYPES.get,
-        //     headers: {
-        //         "x-access-token": config.key
-        //     }
-        // })
-        // let info = new UserInfoView().info
-        // current_user.then(responce => {
-        //     Promise.resolve(responce.json()).then(user => {
-        //         info.name = user.name
-        //         info.position = user.position
-        //         info.description = user.description
-        //         info.organization = user.organization
-        //         //   
-        //         info.contacts.phone = user.phone
-        //         info.contacts.email = user.email
-        //         info.contacts.address = user.address
-        //     })
-        // })
-        // new UserInfoView()
         this.users_info.appendChild(new UserInfoView().contacts)
     }
 
     _generate_main_content(){
         this.main_content = document.createElement('section');
         this.main_content.className = "main_content__section";
-        // 
+        //
+        this._generate__users_list(); 
         this._generate__messages_list();
-        this._generate__users_list();
         this._generate__user_info();
-        
         // 
         let object_array = [this.users_list, this.messages_list, this.users_info];
 

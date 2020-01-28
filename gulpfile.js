@@ -11,6 +11,7 @@ const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const imagemin = require('gulp-imagemin');
 const del = require('del');
+const proxy = require('proxy-middleware');
 
 const folder = {}
 folder.src = './src'
@@ -69,7 +70,14 @@ gulp.task('browser-sync', () => {
     browser_sync.init({
         server: {
             baseDir: 'dist/',
-            directory: true,
+            // directory: true,
+            routes: {
+                '/login': 'dist/html/auth_services/login.html',
+                '/reset': 'dist/html/auth_services/reset_password.html',
+                '/signup': 'dist/html/auth_services/sign_up.html',
+                '/dashboard': 'dist/html/dashboard/dashboard.html'
+            },
+            index: 'html/auth_services/login.html'
         },
         notify: false,
         open: false,

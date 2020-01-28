@@ -6,19 +6,18 @@ export const TYPES = {
 
 const server_settings = config;
 export class FetchTemplate{
-    constructor(error_field, success_field){
+    constructor(error_field = null, success_field = null){
         this.error_field = error_field
         this.success_field = success_field
     }
     request(path, type, data = null){
         if(type == TYPES.get){
-            return fetch(`https://${server_settings.domain}/${path}`, {
+            return fetch(`http://${server_settings.domain}/${path}`, {
                 method: type,
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                     "x-auth-token": config.key
-                },
-                body: JSON.stringify({ data })
+                }
             })
             .then( async responce => {
                 if(responce.status){
@@ -27,22 +26,32 @@ export class FetchTemplate{
             })
             .catch(error => console.log(error))
         }else{
-            return fetch(`https://${server_settings.domain}/${path}`, {
+            return fetch(`http://${server_settings.domain}/${path}`, {
                 method: type,
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                     "x-auth-token": config.key
                 },
-                body: JSON.stringify({ data })
+                body: JSON.stringify(data)
             })
             .then( async responce => {
+                Promise.resolve(responce.json()).then(user => {
+                    Object.entries(user).forEach(([key, value]) => {
+                        window.localStorage.setItem("key", config.key);
+                        window.localStorage.setItem("_id", user._id);
+                    })
+                })
                 if(responce.ok){
-                    responce.json();
+                    if(!this.error_field || !this.success_field){
+                        alert("Success!")
+                        location.href = `/html/dashboard/dashboard.html`
+                    }else{
                         this.message_success.innerText = "Success!"
                         setTimeout(() => {
-                            this.success_field.innerText = "";
-                            location.href = `https://${server_settings.domain}:/html/dashboard/dashboard.html`  
-                        }, 1500)    
+                            this.success_field.innerText = "";  
+                            location.href = `/html/dashboard/dashboard.html`
+                        }, 1500) 
+                    }
                 }else{
                     let text = '';
                     Object.entries(data).forEach(([key, value]) => {
@@ -60,10 +69,14 @@ export class FetchTemplate{
                             text = 'Input fields must be filled!';
                         }
                     })
-                    this.error_field.innerText = text;
-                    setTimeout(() => {
-                        this.error_field.innerHTML = "";
-                    }, 2000);
+                    if(!this.success_field || !this.error_field){
+                        // alert(text);
+                    }else{
+                        this.error_field.innerText = text;
+                        setTimeout(() => {
+                            this.error_field.innerHTML = "";
+                        }, 2000);
+                    }
                 }
             })
             .catch(error => console.log(error))
