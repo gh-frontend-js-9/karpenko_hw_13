@@ -80,6 +80,7 @@ gulp.task('browser-sync', () => {
         },
         notify: false,
         open: false,
+        host: '0.0.0.0',
         port: 3000
     })
 })
