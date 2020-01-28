@@ -3,6 +3,16 @@ export const TYPES = {
     "get": 'GET',
     'post': 'POST'
 }
+export const headers = {
+    auth: {
+        "x-auth-token": config.key,
+        "Content-Type": "application/json"
+    },
+    access: {
+        "x-access-token": config.key,
+        "Content-Type": "application/json"
+    }
+}
 
 const server_settings = config;
 export class FetchTemplate{
@@ -15,7 +25,7 @@ export class FetchTemplate{
             return fetch(`http://${server_settings.domain}/${path}`, {
                 method: type,
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                     "x-auth-token": config.key
                 }
             })
@@ -35,12 +45,9 @@ export class FetchTemplate{
                 body: JSON.stringify(data)
             })
             .then( async responce => {
-                Promise.resolve(responce.json()).then(user => {
-                    Object.entries(user).forEach(([key, value]) => {
-                        window.localStorage.setItem("key", config.key);
-                        window.localStorage.setItem("_id", user._id);
-                    })
-                })
+                if(path.includes('login') || path.includes('sigup')){
+                    new FetchTemplate().PushUserDataToLocalStorage(responce);
+                }
                 if(responce.ok){
                     if(!this.error_field || !this.success_field){
                         alert("Success!")
@@ -61,7 +68,7 @@ export class FetchTemplate{
                             }
                         }
                         if(key.includes('email')){
-                            if(value.length && /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value.toString())){
+                            if(value.length && !value.includes("@") || !value.includes(".") || value.length < 4){
                                 text = 'Invalid email!'
                             }
                         }
@@ -70,7 +77,7 @@ export class FetchTemplate{
                         }
                     })
                     if(!this.success_field || !this.error_field){
-                        // alert(text);
+                        alert(text)
                     }else{
                         this.error_field.innerText = text;
                         setTimeout(() => {
@@ -80,6 +87,18 @@ export class FetchTemplate{
                 }
             })
             .catch(error => console.log(error))
+        }
+    }
+    PushUserDataToLocalStorage(responce){
+        try {
+            Promise.resolve(responce.json()).then(user => {
+                Object.entries(user).forEach(([key, value]) => {
+                    window.localStorage.setItem("key", config.key);
+                    window.localStorage.setItem("_id", user._id);
+                })
+            })
+        } catch (error) {
+            throw new Error(`Error setting item to localStorage: \n${error}`);
         }
     }
 }
