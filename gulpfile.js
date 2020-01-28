@@ -11,7 +11,6 @@ const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const imagemin = require('gulp-imagemin');
 const del = require('del');
-const proxy = require('proxy-middleware');
 
 const folder = {}
 folder.src = './src'
