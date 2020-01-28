@@ -8,7 +8,7 @@
       "host": "localhost",
       "port": 3000,
       "domain": "geekhub-frontend-js-9.herokuapp.com",
-      "key": window.localStorage.getItem("key") || "",
+      "key": window.localStorage.getItem("key") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTE5YzIyM2E0MTk5YzAwMjI3NTI2OGEiLCJpYXQiOjE1Nzk2ODc4OTl9.M5q83O_nP6B8SbfNKOs3CaQTu4JaQcbr_MgDLSgqnTU",
       "interval": 5000
     };
 
@@ -28,7 +28,7 @@
           return fetch(`http://${server_settings.domain}/${path}`, {
             method: type,
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
               "x-auth-token": config.key
             }
           }).then(async responce => {
@@ -45,12 +45,9 @@
             },
             body: JSON.stringify(data)
           }).then(async responce => {
-            Promise.resolve(responce.json()).then(user => {
-              Object.entries(user).forEach(([key, value]) => {
-                window.localStorage.setItem("key", config.key);
-                window.localStorage.setItem("_id", user._id);
-              });
-            });
+            if (path.includes('login') || path.includes('sigup')) {
+              new FetchTemplate().PushUserDataToLocalStorage(responce);
+            }
 
             if (responce.ok) {
               if (!this.error_field || !this.success_field) {
@@ -73,7 +70,7 @@
                 }
 
                 if (key.includes('email')) {
-                  if (value.length && /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value.toString())) {
+                  if (value.length && !value.includes("@") || !value.includes(".") || value.length < 4) {
                     text = 'Invalid email!';
                   }
                 }
@@ -83,7 +80,9 @@
                 }
               });
 
-              if (!this.success_field || !this.error_field) ; else {
+              if (!this.success_field || !this.error_field) {
+                alert(text);
+              } else {
                 this.error_field.innerText = text;
                 setTimeout(() => {
                   this.error_field.innerHTML = "";
@@ -91,6 +90,19 @@
               }
             }
           }).catch(error => console.log(error));
+        }
+      }
+
+      PushUserDataToLocalStorage(responce) {
+        try {
+          Promise.resolve(responce.json()).then(user => {
+            Object.entries(user).forEach(([key, value]) => {
+              window.localStorage.setItem("key", config.key);
+              window.localStorage.setItem("_id", user._id);
+            });
+          });
+        } catch (error) {
+          throw new Error(`Error setting item to localStorage: \n${error}`);
         }
       }
 

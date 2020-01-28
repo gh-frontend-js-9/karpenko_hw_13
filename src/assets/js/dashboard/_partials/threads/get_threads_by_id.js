@@ -4,7 +4,6 @@ import {TYPES} from '../../../api_fetcher/index';
 export class GetThread{
     constructor(){}
     getThreads(id, sort){
-        console.log(config.key)
         fetch(`https://${config.domain}/api/threads/messages/${id}?sort=${sort}`, {
             method: TYPES.get,
             headers: {
