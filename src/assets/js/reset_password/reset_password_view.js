@@ -18,7 +18,7 @@ export class ResetPasswordView {
         let link = document.createElement('a');
         link.className = "link";
         link.innerHTML = "Log in?"
-        link.setAttribute('href', '/html/auth_services/login.html')
+        link.setAttribute('href', '/')
 
         header_group.appendChild(header);
         header_group.appendChild(link);

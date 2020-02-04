@@ -18,7 +18,7 @@ export class LoginView {
         let link = document.createElement('a');
         link.className = "link";
         link.innerHTML = 'Not a member?';
-        link.setAttribute('href', '/html/auth_services/sign_up.html')
+        link.setAttribute('href', '/dashboard')
         // 
         let forgot_data_link = document.createElement('a');
         forgot_data_link.className = "link";

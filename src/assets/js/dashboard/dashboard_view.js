@@ -70,6 +70,12 @@ export class topBarView {
         // 
         let chevron_down = document.createElement('i');
         chevron_down.className = 'fas fa-chevron-down bar-top__user_bar__chevron-down';
+        chevron_down.addEventListener("click", (e) => {
+            let modal_menu = document.createElement("div");
+            modal_menu.className = "modal_center";
+            
+            // let element_list = ["logo"]
+        })
         this.avatar.appendChild(img_avatar);
         this.avatar.appendChild(chevron_down);
 

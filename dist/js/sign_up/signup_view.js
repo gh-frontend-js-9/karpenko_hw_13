@@ -52,12 +52,18 @@
             if (responce.ok) {
               if (!this.error_field || !this.success_field) {
                 alert("Success!");
-                location.href = `/html/dashboard/dashboard.html`;
+
+                if (path.includes('login')) {
+                  location.href = `/dashboard`;
+                }
               } else {
                 this.message_success.innerText = "Success!";
                 setTimeout(() => {
                   this.success_field.innerText = "";
-                  location.href = `/html/dashboard/dashboard.html`;
+
+                  if (path.includes('login')) {
+                    location.href = `/dashboard`;
+                  }
                 }, 1500);
               }
             } else {
@@ -124,7 +130,7 @@
         let link = document.createElement('a');
         link.className = "link";
         link.innerHTML = 'Existing member?';
-        link.setAttribute('href', '/html/auth_services/login.html');
+        link.setAttribute('href', '/login');
         header_group.appendChild(header);
         header_group.appendChild(link);
         this.form = document.createElement('form');

@@ -18,7 +18,7 @@
     };
     const headers = {
       auth: {
-        "x-auth-token": config.key,
+        "x--token": config.key,
         "Content-Type": "application/json"
       },
       access: {

@@ -51,12 +51,18 @@
             if (responce.ok) {
               if (!this.error_field || !this.success_field) {
                 alert("Success!");
-                location.href = `/html/dashboard/dashboard.html`;
+
+                if (path.includes('login')) {
+                  location.href = `/dashboard`;
+                }
               } else {
                 this.message_success.innerText = "Success!";
                 setTimeout(() => {
                   this.success_field.innerText = "";
-                  location.href = `/html/dashboard/dashboard.html`;
+
+                  if (path.includes('login')) {
+                    location.href = `/dashboard`;
+                  }
                 }, 1500);
               }
             } else {
@@ -123,7 +129,7 @@
         let link = document.createElement('a');
         link.className = "link";
         link.innerHTML = 'Not a member?';
-        link.setAttribute('href', '/html/auth_services/sign_up.html'); // 
+        link.setAttribute('href', '/dashboard'); // 
 
         let forgot_data_link = document.createElement('a');
         forgot_data_link.className = "link";

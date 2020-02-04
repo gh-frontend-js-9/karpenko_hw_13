@@ -18,7 +18,7 @@
     };
     const headers = {
       auth: {
-        "x-auth-token": config.key,
+        "x--token": config.key,
         "Content-Type": "application/json"
       },
       access: {
@@ -62,12 +62,18 @@
             if (responce.ok) {
               if (!this.error_field || !this.success_field) {
                 alert("Success!");
-                location.href = `/html/dashboard/dashboard.html`;
+
+                if (path.includes('login')) {
+                  location.href = `/dashboard`;
+                }
               } else {
                 this.message_success.innerText = "Success!";
                 setTimeout(() => {
                   this.success_field.innerText = "";
-                  location.href = `/html/dashboard/dashboard.html`;
+
+                  if (path.includes('login')) {
+                    location.href = `/dashboard`;
+                  }
                 }, 1500);
               }
             } else {
