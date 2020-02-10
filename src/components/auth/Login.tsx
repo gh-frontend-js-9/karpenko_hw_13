@@ -1,4 +1,3 @@
-// https://github.com/jordanhudgens/react-auth-app/blob/master/src/components/auth/Login.js
 import React , {Component} from "react";
 import fetcher from "../Fetcher/index";
 import { FetchConfig } from "../Fetcher/config";
